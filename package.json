@@ -1,0 +1,17 @@
+{
+  "name": "html2pdf",
+  "version": "1.0.0",
+  "main": "index.js",
+  "engines": {
+    "node": ">=12 <=14"
+  },
+  "dependencies": {
+    "puppeteer": "^10.4.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.4.1"
+  },
+  "scripts": {
+    "fmt": "prettier --write *.js"
+  }
+}
