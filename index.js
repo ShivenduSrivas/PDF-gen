@@ -52,14 +52,22 @@ exports.pdfByURL = async (req, res) => {
     if (!page) {
         page = await getBrowserPage();
     }
-
-    await page.goto(parsedUrl.toString());
-
-    const mediaType = req.query.mediaType || "screen";
-    await page.emulateMediaType(mediaType);
-
+	
+	try {
+		await page.goto(parsedUrl.toString());
+		// Wait for the cookie banner to appear
+		await page.waitForSelector('#onetrust-banner-sdk');
+		// Click the "Accept" button
+		await page.click('#onetrust-accept-btn-handler');
+		// Wait for any page changes to complete
+		await page.waitForNavigation();
+		const mediaType = req.query.mediaType || "screen";
+		await page.emulateMediaType(mediaType);
+	}catch (error) {
+		console.error(error);
+    }
     const pdfBuffer = await page.pdf({ printBackground: true });
-
+	
     res.set("Content-Type", "application/pdf");
     res.status(200).send(pdfBuffer);
 };
